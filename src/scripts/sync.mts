@@ -1,5 +1,6 @@
-import sequelize from '../utils/db';
-import User from '../models/user.model';
+import sequelize from '../utils/db.js';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import User from '../models/user.model.js';
 
 const syncDatabase = async () => {
   try {
