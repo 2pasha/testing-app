@@ -1,8 +1,8 @@
-const path = require("path");
+import path from "path";
 
 module.exports = {
-  config: path.resolve(__dirname, "src/config/database.ts"),
-  "models-path": path.resolve(__dirname, "src/models"),
-  "seeders-path": path.resolve(__dirname, "src/seeders"),
-  "migrations-path": path.resolve(__dirname, "src/migrations"),
+  config: path.resolve("./src/config/database.js"),
+  modelsPath: path.resolve("./src/models"),
+  migrationsPath: path.resolve("./src/migrations"),
+  seedersPath: path.resolve("./src/seeders"),
 };

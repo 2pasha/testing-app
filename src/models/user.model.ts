@@ -1,5 +1,6 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../utils/db';
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "../utils/db";
+import bcrypt from "bcryptjs";
 
 interface UserAttributes {
   id: number;
@@ -9,7 +10,10 @@ interface UserAttributes {
   role: "student" | "teacher";
 }
 
-class User extends Model<UserAttributes, Optional<UserAttributes, "id">> implements UserAttributes {
+class User
+  extends Model<UserAttributes, Optional<UserAttributes, "id">>
+  implements UserAttributes
+{
   public id!: number;
   public name!: string;
   public email!: string;
@@ -47,9 +51,20 @@ User.init(
   },
   {
     sequelize,
-    tableName: "users",
+    tableName: "Users",
     timestamps: true, // Adds createdAt & updatedAt
   }
 );
+
+User.beforeCreate(async (user) => {
+  if (!user.getDataValue("password")) {
+    throw new Error("Password is required");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(user.getDataValue("password"), salt);
+
+  user.setDataValue("password", hashedPassword);
+});
 
 export default User;

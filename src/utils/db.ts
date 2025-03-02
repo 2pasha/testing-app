@@ -9,6 +9,9 @@ const sequelize = new Sequelize(
     host: development.host,
     dialect: "postgres",
     logging: false,
+    define: {
+      freezeTableName: true,
+    }
   }
 )
 

@@ -7,10 +7,15 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "migrate": "npx ts-node --loader ts-node/esm ./node_modules/.bin/sequelize-cli db:migrate",
+    "migrate:undo": "npx ts-node --loader ts-node/esm ./node_modules/.bin/sequelize-cli db:migrate:undo",
+    "seed": "npx ts-node --loader ts-node/esm ./node_modules/.bin/sequelize-cli db:seed:all"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
     "next": "15.2.0",
     "pg": "^8.13.3",
     "react": "^19.0.0",
@@ -18,6 +23,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@sequelize/cli": "^7.0.0-alpha.44",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
