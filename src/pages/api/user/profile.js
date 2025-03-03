@@ -1,4 +1,4 @@
-import User from "@/models/user.model";
+import { User } from "@/utils/db";
 import authMiddleware from "@/utils/authMiddleware";
 
 export default async function handler(req, res) {

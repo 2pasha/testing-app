@@ -1,5 +1,4 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import User from "./user.model";
 
 interface TestAttributes {
   id: number;
@@ -22,10 +21,6 @@ class Test extends Model<TestAttributes, Optional<TestAttributes, "id">> {
         teacherId: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          references: {
-            model: User,
-            key: "id",
-          },
         },
         testName: {
           type: DataTypes.STRING,
@@ -51,10 +46,20 @@ class Test extends Model<TestAttributes, Optional<TestAttributes, "id">> {
     );
   }
 
-  static associate() {
-    User.hasMany(Test, { foreignKey: "teacherId" });
-    Test.belongsTo(User, { foreignKey: "teacherId" });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static associate(models: any) {
+    if (!models.User || !(models.User.prototype instanceof Model)) {
+      throw new Error("User model is not initialized");
+    }
+
+    Test.belongsTo(models.User, { foreignKey: "teacherId" });
   }
 }
 
-export default Test;
+const initializeTestModel = (sequelize: Sequelize) => {
+  Test.initModel(sequelize);
+
+  return Test;
+};
+
+export default initializeTestModel;

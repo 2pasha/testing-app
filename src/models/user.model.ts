@@ -1,6 +1,5 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
 import bcrypt from "bcryptjs";
-import Test from './test.model';
 
 interface UserAttributes {
   id: number;
@@ -64,9 +63,19 @@ class User extends Model<UserAttributes, Optional<UserAttributes, "id">> {
     );
   }
 
-  static associate() {
-    User.hasMany(Test, { foreignKey: "userId" });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static associate(models: any) {
+    if (!models.Test || !(models.Test.prototype instanceof Model)) {
+      throw new Error("Test model is not initialized");
+    }
+    User.hasMany(models.Test, { foreignKey: "teacherId" });
   }
 }
 
-export default User;
+const initializeUserModel = (sequelize: Sequelize) => {
+  User.initModel(sequelize);
+
+  return User;
+};
+
+export default initializeUserModel;

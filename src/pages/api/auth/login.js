@@ -1,4 +1,4 @@
-import User from "@/models/user.model";
+import { User } from "@/utils/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -33,16 +33,14 @@ export default async function handler(req, res) {
     }
 
     const tokenPayload = {
-      id: user.getDataValue("id"), 
-      email: user.getDataValue("email"), 
-      role: user.getDataValue("role")
-    }
+      id: user.getDataValue("id"),
+      email: user.getDataValue("email"),
+      role: user.getDataValue("role"),
+    };
 
-    const token = jwt.sign(
-      tokenPayload,
-      process.env.JWT_SECRET,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
 
     res.setHeader(
       "Set-Cookie",

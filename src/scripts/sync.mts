@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import sequelize from "../utils/db.js";
+import { sequelize } from "../utils/db.js";
 import User from "../models/user.model.js";
-import Test from '../models/test.model.js';
-import Question from '../models/question.model.js';
-import TestResult from '../models/testResult.model.js';
-import Answer from '../models/answer.model.js';
+import Test from "../models/test.model.js";
+import Question from "../models/question.model.js";
+import TestResult from "../models/testResult.model.js";
+import Answer from "../models/answer.model.js";
 
 const syncDatabase = async () => {
   try {

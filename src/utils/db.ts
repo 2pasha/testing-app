@@ -1,10 +1,10 @@
-import development from '../config/database';
-import { Sequelize } from 'sequelize';
-import User from '../models/user.model';
-import Test from '../models/test.model';
-import Answer from '../models/answer.model';
-import Question from '../models/question.model';
-import TestResult from '../models/testResult.model';
+import development from "../config/database";
+import { Sequelize } from "sequelize";
+import getUserModel from "../models/user.model";
+import getTestModel from "../models/test.model";
+import getAnswerModel from "../models/answer.model";
+import getQuestionModel from "../models/question.model";
+import getTestResultModel from "../models/testResult.model";
 
 const sequelize = new Sequelize(
   development.database,
@@ -16,20 +16,24 @@ const sequelize = new Sequelize(
     logging: false,
     define: {
       freezeTableName: true,
-    }
+    },
   }
-)
+);
 
-User.initModel(sequelize);
-Test.initModel(sequelize);
-Question.initModel(sequelize);
-TestResult.initModel(sequelize);
-Answer.initModel(sequelize);
+const models = {
+  User: getUserModel(sequelize),
+  Test: getTestModel(sequelize),
+  Question: getQuestionModel(sequelize),
+  TestResult: getTestResultModel(sequelize),
+  Answer: getAnswerModel(sequelize),
+}
 
-User.associate();
-Test.associate();
-Question.associate();
-TestResult.associate();
-Answer.associate();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+Object.values(models).forEach((model: any) => {
+  if (model.associate) {
+    model.associate(models);
+  }
+})
 
-export default sequelize;
+export const { User, Test, Question, TestResult, Answer } = models;
+export { sequelize };

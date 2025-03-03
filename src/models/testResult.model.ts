@@ -1,6 +1,4 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import User from "./user.model";
-import Test from "./test.model";
 
 interface TestResultAttributes {
   id: number;
@@ -26,18 +24,10 @@ class TestResult extends Model<
         studentId: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          references: {
-            model: User,
-            key: "id",
-          },
         },
         testId: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          references: {
-            model: Test,
-            key: "id",
-          },
         },
         score: {
           type: DataTypes.INTEGER,
@@ -60,12 +50,28 @@ class TestResult extends Model<
     );
   }
 
-  static associate() {
-    User.hasMany(TestResult, { foreignKey: "studentId" });
-    Test.hasMany(TestResult, { foreignKey: "testId" });
-    TestResult.belongsTo(User, { foreignKey: "studentId" });
-    TestResult.belongsTo(Test, { foreignKey: "testId" });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static associate(models: any) {
+    if (!models.Test || !(models.Test.prototype instanceof Model)) {
+      throw new Error("Test model is not initialized");
+    }
+
+    if (!models.User || !(models.User.prototype instanceof Model)) {
+      throw new Error("User model is not initialized");
+    }
+
+    models.User.hasMany(TestResult, { foreignKey: "studentId" });
+    models.Test.hasMany(TestResult, { foreignKey: "testId" });
+
+    TestResult.belongsTo(models.Test, { foreignKey: "testId" });
+    TestResult.belongsTo(models.User, { foreignKey: "studentId" });
   }
 }
 
-export default TestResult;
+const initializeTestResultModel = (sequelize: Sequelize) => {
+  TestResult.initModel(sequelize);
+
+  return TestResult;
+};
+
+export default initializeTestResultModel;

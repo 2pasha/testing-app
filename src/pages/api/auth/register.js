@@ -1,10 +1,11 @@
-import User from "@/models/user.model";
+import { User } from "@/utils/db";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method Not Allowed" });
   }
 
+  
   try {
     const { name, email, password, role = "student" } = req.body;
 
@@ -13,8 +14,10 @@ export default async function handler(req, res) {
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-
+    
     const newUser = await User.create({ name, email, password, role });
+    
+    console.log(existingUser);
 
     res.status(201).json({ message: "User created successfully", user: { id: newUser.id, name, email, role } });
   } catch (error) {

@@ -1,5 +1,4 @@
 import { DataTypes, Model, Optional, Sequelize } from "sequelize";
-import Test from "./test.model";
 
 interface QuestionAttributes {
   id: number;
@@ -26,10 +25,6 @@ class Question extends Model<
         testId: {
           type: DataTypes.INTEGER,
           allowNull: false,
-          references: {
-            model: Test,
-            key: "id",
-          },
         },
         questionType: {
           type: DataTypes.ENUM(
@@ -65,10 +60,28 @@ class Question extends Model<
     );
   }
 
-  static associate() {
-    Test.hasMany(Question, { foreignKey: "testId" });
-    Question.belongsTo(Test, { foreignKey: "testId" });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static associate(models: any) {
+    if (!models.Test || !(models.Test.prototype instanceof Model)) {
+      throw new Error("Test model is not initialized");
+    }
+
+    if (!models.Answer || !(models.Answer.prototype instanceof Model)) {
+      throw new Error("Answer model is not initialized");
+    }
+
+    Question.belongsTo(models.Test, { foreignKey: "testId" });
+    Question.belongsTo(models.Answer, { foreignKey: "answerId" });
   }
+
+  // Test.hasMany(Question, { foreignKey: "testId" });
+  // Question.belongsTo(Test, { foreignKey: "testId" });
 }
 
-export default Question;
+const initializeQuestionModel = (sequelize: Sequelize) => {
+  Question.initModel(sequelize);
+
+  return Question;
+};
+
+export default initializeQuestionModel;
