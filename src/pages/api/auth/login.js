@@ -2,6 +2,7 @@ import User from "@/models/user.model";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import { serialize } from "cookie";
 
 dotenv.config();
 
@@ -13,9 +14,10 @@ export default async function handler(req, res) {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ where: { email } });
-
-    console.log("Received Login Request:", { email, password });
+    const user = await User.findOne({
+      where: { email },
+      attributes: ["id", "email", "password", "role"],
+    });
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });
@@ -30,10 +32,27 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    const tokenPayload = {
+      id: user.getDataValue("id"), 
+      email: user.getDataValue("email"), 
+      role: user.getDataValue("role")
+    }
+
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      tokenPayload,
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
+    );
+
+    res.setHeader(
+      "Set-Cookie",
+      serialize("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 3600,
+      })
     );
 
     res.json({ message: "Login successful", token });

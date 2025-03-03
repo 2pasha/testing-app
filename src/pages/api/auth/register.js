@@ -6,8 +6,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("Received request body:", req.body); 
-
     const { name, email, password, role = "student" } = req.body;
 
     const existingUser = await User.findOne({ where: { email } });
