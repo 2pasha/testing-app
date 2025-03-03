@@ -10,16 +10,7 @@ interface UserAttributes {
   role: "student" | "teacher";
 }
 
-class User
-  extends Model<UserAttributes, Optional<UserAttributes, "id">>
-  implements UserAttributes
-{
-  public id!: number;
-  public name!: string;
-  public email!: string;
-  public password!: string;
-  public role!: "student" | "teacher";
-}
+class User extends Model<UserAttributes, Optional<UserAttributes, "id">> {}
 
 User.init(
   {
