@@ -1,15 +1,15 @@
-import sequelize from '@/utils/db';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { sequelize } from "@/utils/db";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ) {
   try {
     await sequelize.authenticate();
 
-    res.status(200).json({ message: 'DB connected successfully'});
+    res.status(200).json({ message: "DB connected successfully" });
   } catch (error) {
-    res.status(500).json({ message: 'DB connection failed', error});
+    res.status(500).json({ message: "DB connection failed", error });
   }
 }

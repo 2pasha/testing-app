@@ -66,12 +66,7 @@ class Question extends Model<
       throw new Error("Test model is not initialized");
     }
 
-    if (!models.Answer || !(models.Answer.prototype instanceof Model)) {
-      throw new Error("Answer model is not initialized");
-    }
-
     Question.belongsTo(models.Test, { foreignKey: "testId" });
-    Question.belongsTo(models.Answer, { foreignKey: "answerId" });
   }
 
   // Test.hasMany(Question, { foreignKey: "testId" });

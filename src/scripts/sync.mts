@@ -23,4 +23,4 @@ const syncDatabase = async () => {
 
 syncDatabase();
 
-// npx tsc -> node dist/script/sunc.js
+// npx tsc -> node dist/script/sunc.mjs
