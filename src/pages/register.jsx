@@ -73,23 +73,23 @@ export default function Register() {
   };
 
   return (
-    <div className="flex items-center justify-center p-6">
+    <div className="flex items-center justify-center p-2">
       <div className="p-8 rounded-lg shadow-lg w-full max-w-md">
         {step === 1 ? (
           <>
-            <h2 className="text-2xl font-bold text-center mb-6">Register as</h2>
+            <h2 className="text-2xl font-bold text-center mb-6">[ register as ]</h2>
             <div className="flex flex-col space-y-4">
               <button
                 onClick={() => handleRoleSelection("student")}
                 className="border border-white text-white px-6 py-3 rounded-md hover:bg-white hover:text-black"
               >
-                Student
+                student
               </button>
               <button
                 onClick={() => handleRoleSelection("teacher")}
                 className="border border-white text-white px-6 py-3 rounded-md hover:bg-white hover:text-black"
               >
-                Teacher
+                teacher
               </button>
             </div>
           </>
@@ -106,30 +106,30 @@ export default function Register() {
           >
             {({ isSubmitting }) => (
               <Form className="flex flex-col space-y-4">
-                <h2 className="text-xl font-bold text-center mb-4">Register as {role}</h2>
+                <h2 className="text-xl font-bold text-center mb-4">[ register as {role} ]</h2>
 
                 {errorMessage && <p className="text-red-500 text-sm text-center">{errorMessage}</p>}
 
                 <div>
-                  <label className="block text-sm my-2">Name</label>
+                  <label className="block text-sm my-2">name</label>
                   <Field type="text" name="name" className="w-full px-4 py-2 bg-gray-700 rounded-md text-white" />
                   <ErrorMessage name="name" component="div" className="text-red text-sm my-2" />
                 </div>
 
                 <div>
-                  <label className="block text-sm my-2">Email</label>
+                  <label className="block text-sm my-2">email</label>
                   <Field type="email" name="email" className="w-full px-4 py-2 bg-gray-700 rounded-md text-white" />
                   <ErrorMessage name="email" component="div" className="text-red text-sm my-2" />
                 </div>
 
                 <div>
-                  <label className="block text-sm my-2">Password</label>
+                  <label className="block text-sm my-2">password</label>
                   <Field type="password" name="password" className="w-full px-4 py-2 bg-gray-700 rounded-md text-white" />
                   <ErrorMessage name="password" component="div" className="text-red text-sm my-2" />
                 </div>
 
                 <div>
-                  <label className="block text-sm my-2">Confirm Password</label>
+                  <label className="block text-sm my-2">confirm password</label>
                   <Field type="password" name="confirmPassword" className="w-full px-4 py-2 bg-gray-700 rounded-md text-white" />
                   <ErrorMessage name="confirmPassword" component="div" className="text-red text-sm my-2" />
                 </div>
@@ -137,9 +137,9 @@ export default function Register() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="cursor-pointer bg-white text-black border border-white font-semibold px-6 py-3 rounded-md hover:bg-black hover:text-white disabled:bg-gray-600"
+                  className="my-2 cursor-pointer bg-white text-black border border-white font-semibold px-6 py-3 rounded-md hover:bg-black hover:text-white disabled:bg-gray-600"
                 >
-                  {isSubmitting ? "Registering..." : "Register"}
+                  {isSubmitting ? "registering..." : "register"}
                 </button>
 
                 <button
@@ -147,7 +147,7 @@ export default function Register() {
                   onClick={() => setStep(1)}
                   className="cursor-pointer text-gray-400 hover:text-white text-sm text-center"
                 >
-                  Back to role selection
+                  back to role selection
                 </button>
               </Form>
             )}
