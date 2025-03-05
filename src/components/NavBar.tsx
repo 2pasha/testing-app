@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Navbar() {
+  const { user, loading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+
+  console.log(user, loading);
 
   // Disable scrolling when menu is open
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = isOpen ? "hidden" : "auto";
   }, [isOpen]);
 
   return (
@@ -39,20 +39,22 @@ export function Navbar() {
         </div>
 
         {/* Auth Buttons (Desktop) */}
-        <div className="hidden md:flex space-x-2">
-          <Link
-            href="/login"
-            className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
-          >
-            login
-          </Link>
-          <Link
-            href="/register"
-            className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white"
-          >
-            register
-          </Link>
-        </div>
+        {!loading && !user && (
+          <div className="hidden md:flex space-x-2">
+            <Link
+              href="/login"
+              className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
+            >
+              login
+            </Link>
+            <Link
+              href="/register"
+              className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white"
+            >
+              register
+            </Link>
+          </div>
+        )}
 
         {/* Mobile Menu Button */}
         <button
@@ -88,9 +90,7 @@ export function Navbar() {
                   onClick={() => setIsOpen(false)}
                   className="relative group"
                 >
-                  <span className="inline-block">
-                    {path}
-                  </span>
+                  <span className="inline-block">{path}</span>
                   {/* Animated Underline that matches word width */}
                   <motion.div
                     className="absolute left-0 bottom-[-2px] h-[2px] bg-white origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300"
@@ -102,20 +102,24 @@ export function Navbar() {
                 </Link>
               ))}
 
-              <Link
-                href="/login"
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black font-normal"
-              >
-                login
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white font-normal"
-              >
-                register
-              </Link>
+              {!loading && !user && (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black font-normal"
+                  >
+                    login
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setIsOpen(false)}
+                    className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white font-normal"
+                  >
+                    register
+                  </Link>
+                </>
+              )}
             </div>
           </motion.div>
         )}
