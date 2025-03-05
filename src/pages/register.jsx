@@ -63,8 +63,8 @@ export default function Register() {
         throw new Error(loginData.message || "Login failed");
       }
 
-      // Redirect to dashboard after successful login
-      router.push("/dashboard");
+      // Redirect to profile page after successful login
+      router.push("/profile");
     } catch (error) {
       setErrorMessage(error.message);
     } finally {
