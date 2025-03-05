@@ -20,7 +20,7 @@ export function Navbar() {
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="text-xl font-bold text-white">
-          Knowledge Testing
+          knowledge testing
         </Link>
 
         {/* Desktop Menu */}
@@ -31,7 +31,7 @@ export function Navbar() {
               href={path}
               className="relative group text-gray-300 hover:text-white"
             >
-              {path.replace("/", "").charAt(0).toUpperCase() + path.slice(2)}
+              {path}
               {/* Animated Underline */}
               <motion.div className="absolute left-0 bottom-0 w-full h-[1px] bg-white origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
             </Link>
@@ -44,13 +44,13 @@ export function Navbar() {
             href="/login"
             className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
           >
-            Login
+            login
           </Link>
           <Link
             href="/register"
             className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white"
           >
-            Register
+            register
           </Link>
         </div>
 
@@ -75,7 +75,7 @@ export function Navbar() {
           >
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-4 right-4 text-white"
+              className="absolute top-4 right-4 text-white cursor-pointer"
             >
               <X size={32} />
             </button>
@@ -89,8 +89,7 @@ export function Navbar() {
                   className="relative group"
                 >
                   <span className="inline-block">
-                    {path.replace("/", "").charAt(0).toUpperCase() +
-                      path.slice(2)}
+                    {path}
                   </span>
                   {/* Animated Underline that matches word width */}
                   <motion.div
@@ -108,14 +107,14 @@ export function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black font-normal"
               >
-                Login
+                login
               </Link>
               <Link
                 href="/register"
                 onClick={() => setIsOpen(false)}
                 className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white font-normal"
               >
-                Register
+                register
               </Link>
             </div>
           </motion.div>
