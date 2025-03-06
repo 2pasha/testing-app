@@ -6,6 +6,8 @@ import LogoutModal from "./LogoutModal";
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/router';
 
+const tabs = ["/tests", "/about", "/contact"];
+
 export function Navbar() {
   const { user, loading, logout } = useAuth(); 
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +35,7 @@ export function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-6">
-          {["/tests", "/about", "/contact"].map((path, index) => (
+          {tabs.map((path, index) => (
             <Link
               key={index}
               href={path}
@@ -107,7 +109,7 @@ export function Navbar() {
             </button>
 
             <div className="flex flex-col space-y-6 text-2xl font-semibold">
-              {["/tests", "/about", "/contact"].map((path, index) => (
+              {tabs.map((path, index) => (
                 <Link
                   key={index}
                   href={path}
