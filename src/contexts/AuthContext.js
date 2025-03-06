@@ -12,12 +12,17 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("/api/user", { credentials: "include" });
+        const response = await fetch("/api/user/profile", {
+          method: "GET",
+          credentials: "include", // Ensure cookies are sent
+        });
+
         if (!response.ok) throw new Error("Not authenticated");
+
         const userData = await response.json();
-        setUser(userData);
+        setUser(userData); // Set user data globally
       } catch {
-        setUser(null);
+        setUser(null); // Clear user if error
       } finally {
         setLoading(false);
       }
@@ -26,20 +31,27 @@ export const AuthProvider = ({ children }) => {
     fetchUser();
   }, []);
 
-  // Login function that updates global state
+  // Login function that updates auth state immediately
   const login = async (email, password) => {
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
-        credentials: "include",
+        credentials: "include", // Send cookies
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       if (!response.ok) throw new Error("Invalid credentials");
 
-      // Fetch user details after login
-      const userData = await response.json();
+      // Fetch user profile immediately after login
+      const userProfile = await fetch("/api/user/profile", {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!userProfile.ok) throw new Error("Failed to get user profile");
+
+      const userData = await userProfile.json();
       setUser(userData); // Update auth state immediately
       return { success: true };
     } catch (error) {
@@ -47,10 +59,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout function that updates global state
+  // Logout function that clears auth state
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    setUser(null); // Update state immediately
+    setUser(null); // Remove user from state
   };
 
   return (

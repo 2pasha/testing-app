@@ -16,7 +16,7 @@ export default async function authMiddleware(req, res, next) {
     const verified = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = verified;
-    next();
+    return next();
   } catch {
     return res.status(401).json({ message: "Unauthorized: Invalid token" });
   }
