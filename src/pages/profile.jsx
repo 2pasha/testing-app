@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
@@ -37,7 +38,23 @@ export default function Profile() {
         {loading ? (
           <p className="text-center text-gray-400">Loading user data...</p>
         ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
+          <div className="flex flex-col items-center space-y-4">
+            <p className="text-center text-red-500">{error}</p>
+            <div className="flex space-x-2">
+              <Link
+                href="/login"
+                className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
+              >
+                login
+              </Link>
+              <Link
+                href="/register"
+                className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white"
+              >
+                register
+              </Link>
+            </div>
+          </div>
         ) : (
           <>
             <h2 className="text-2xl font-bold text-center mb-4">[ profile ]</h2>

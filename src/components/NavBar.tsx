@@ -8,8 +8,6 @@ export function Navbar() {
   const { user, loading } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
-  console.log(user, loading);
-
   // Disable scrolling when menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
