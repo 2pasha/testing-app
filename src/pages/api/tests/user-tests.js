@@ -22,7 +22,9 @@ export default async function handler(req, res) {
           include: [{ model: Test }],
         });
 
-        return res.json({ tests: completedTests.map((result) => result.Test) });
+        completedTests.map(result => (console.log(result)));
+
+        return res.json({ tests: completedTests });
       }
 
       res.status(403).json({ message: "Invalid role" });
