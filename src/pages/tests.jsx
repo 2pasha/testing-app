@@ -34,8 +34,8 @@ export default function Tests() {
 
   if (!user) {
     return (
-      <div className="text-center text-red-700 p-6">
-        You must be logged in to view tests.
+      <div className="text-center p-6">
+        you must be logged in to view tests :(
       </div>
     );
   }
