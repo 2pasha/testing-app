@@ -2,16 +2,26 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/hooks/useAuth";
+import LogoutModal from "./LogoutModal";
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 export function Navbar() {
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth(); 
   const [isOpen, setIsOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const router = useRouter();
 
   // Disable scrolling when menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";
   }, [isOpen]);
+
+  const handleLogout = () => {
+    logout();
+    setShowLogoutModal(false);
+    router.push("/");
+  };
 
   return (
     <nav className="p-4">
@@ -37,22 +47,38 @@ export function Navbar() {
         </div>
 
         {/* Auth Buttons (Desktop) */}
-        {!loading && !user && (
-          <div className="hidden md:flex space-x-2">
-            <Link
-              href="/login"
-              className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
-            >
-              login
-            </Link>
-            <Link
-              href="/register"
-              className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white"
-            >
-              register
-            </Link>
-          </div>
-        )}
+        {!loading &&
+          (!user ? (
+            <div className="hidden md:flex space-x-2">
+              <Link
+                href="/login"
+                className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
+              >
+                login
+              </Link>
+              <Link
+                href="/register"
+                className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white"
+              >
+                register
+              </Link>
+            </div>
+          ) : (
+            <div className="hidden md:flex space-x-2">
+              <Link
+                href="/profile"
+                className="px-4 py-2 rounded-md hover:bg-white hover:text-black"
+              >
+                [ profile ]
+              </Link>
+              <button
+                onClick={() => setShowLogoutModal(true)}
+                className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
+              >
+                logout
+              </button>
+            </div>
+          ))}
 
         {/* Mobile Menu Button */}
         <button
@@ -100,7 +126,7 @@ export function Navbar() {
                 </Link>
               ))}
 
-              {!loading && !user && (
+              {!loading && !user ? (
                 <>
                   <Link
                     href="/login"
@@ -117,11 +143,33 @@ export function Navbar() {
                     register
                   </Link>
                 </>
+              ) : (
+                <>
+                  <Link
+                    href="/profile"
+                    onClick={() => setIsOpen(false)}
+                    className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
+                  >
+                    profile
+                  </Link>
+                  <button
+                    onClick={() => setShowLogoutModal(true)}
+                    className="px-4 py-2 bg-red-600 border border-white text-white rounded-md hover:bg-red-500"
+                  >
+                    logout
+                  </button>
+                </>
               )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      <LogoutModal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleLogout}
+      />
     </nav>
   );
 }

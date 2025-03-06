@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Login() {
+  const { login } = useAuth();
   const [errorMessage, setErrorMessage] = useState(""); // Handle errors
   const router = useRouter();
 
@@ -19,26 +21,15 @@ export default function Login() {
   const handleSubmit = async (values, { setSubmitting }) => {
     setErrorMessage(""); // Clear previous errors
 
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+    const result = await login(values.email, values.password);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      // Redirect to profile page after successful login
+    if (result.success) {
       router.push("/profile");
-    } catch (error) {
-      setErrorMessage(error.message);
-    } finally {
-      setSubmitting(false);
+    } else {
+      setErrorMessage(result.message);
     }
+
+    setSubmitting(false);
   };
 
   return (
