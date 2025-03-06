@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { Edit3 } from "lucide-react";
+import { useRouter } from "next/router";
 
 export default function Tests() {
   const { user, loading } = useAuth(); // Get user info from context
   const [tests, setTests] = useState([]);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) return;
@@ -52,12 +54,12 @@ export default function Tests() {
 
       {user.role === "teacher" && (
         <div className="text-center mb-6">
-          <Link
-            href="/tests/create"
+          <button
+            onClick={() => router.push("/tests/create")}
             className="px-4 py-2 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white"
           >
             + new test
-          </Link>
+          </button>
         </div>
       )}
 
