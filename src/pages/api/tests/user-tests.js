@@ -22,8 +22,6 @@ export default async function handler(req, res) {
           include: [{ model: Test }],
         });
 
-        completedTests.map(result => (console.log(result)));
-
         return res.json({ tests: completedTests });
       }
 

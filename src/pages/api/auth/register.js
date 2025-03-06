@@ -17,8 +17,6 @@ export default async function handler(req, res) {
     
     const newUser = await User.create({ name, email, password, role });
     
-    console.log(existingUser);
-
     res.status(201).json({ message: "User created successfully", user: { id: newUser.id, name, email, role } });
   } catch (error) {
     res.status(500).json({ message: "Error register user", error: error.message });

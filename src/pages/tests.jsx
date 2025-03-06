@@ -65,9 +65,7 @@ export default function Tests() {
         <p className="text-center text-gray-400">No tests found.</p>
       ) : (
         <ul className="max-w-3xl mx-auto">
-          {tests.map((test) => (
-            console.log(test),
-            
+          {tests.map((test) => (            
             <li
               key={test.id}
               className="border border-white p-4 rounded-lg shadow-md mb-4 flex justify-between items-center"
