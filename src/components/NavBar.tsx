@@ -3,13 +3,13 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import LogoutModal from "./LogoutModal";
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/router';
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/router";
 
 const tabs = ["/tests", "/about", "/contact"];
 
 export function Navbar() {
-  const { user, loading, logout } = useAuth(); 
+  const { user, loading, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const router = useRouter();
@@ -71,7 +71,7 @@ export function Navbar() {
                 href="/profile"
                 className="px-4 py-2 rounded-md hover:bg-white hover:text-black"
               >
-                [ profile ]
+                [ {user.role} &apos;s profile ]
               </Link>
               <button
                 onClick={() => setShowLogoutModal(true)}
@@ -150,13 +150,13 @@ export function Navbar() {
                   <Link
                     href="/profile"
                     onClick={() => setIsOpen(false)}
-                    className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
+                    className="px-4 py-2 rounded-md hover:bg-white hover:text-black"
                   >
-                    profile
+                    [ {user.role} &apos;s profile ]
                   </Link>
                   <button
                     onClick={() => setShowLogoutModal(true)}
-                    className="px-4 py-2 bg-red-600 border border-white text-white rounded-md hover:bg-red-500"
+                    className="px-4 py-2 border border-white text-white rounded-md hover:bg-white hover:text-black"
                   >
                     logout
                   </button>
