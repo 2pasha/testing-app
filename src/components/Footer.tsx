@@ -28,7 +28,7 @@ export function Footer() {
         {/* Right Section - Social Media */}
         <div className="flex space-x-4 mt-4 md:mt-0">
           <a
-            href="www.linkedin.com/in/pavlo-kostyshyn-5871b8196"
+            href="https://www.linkedin.com/in/pavlo-kostyshyn-5871b8196/"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-white transition-colors"
