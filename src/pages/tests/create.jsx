@@ -32,7 +32,6 @@ export default function CreateTest() {
 
     if (response.ok) {
       setTestId(data.test.id);
-      console.log(testId, data.test.id);
       setStep(2);
     } else {
       alert(data.message);
