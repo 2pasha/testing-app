@@ -22,9 +22,10 @@ export default async function handler(req, res) {
         questionOptions = "",
         correctAnswer,
         weight,
+        poolId,
       } = req.body;
 
-      if (!testId || !questionType || !questionText || !correctAnswer) {
+      if (!testId || !questionType || !questionText || !correctAnswer || !poolId) {
         return res.status(400).json({ message: "Missing required fields" });
       }
 
@@ -35,6 +36,7 @@ export default async function handler(req, res) {
         questionOptions,
         correctAnswer,
         weight,
+        poolId,
       });
 
       res.status(201).json(newQuestion);
