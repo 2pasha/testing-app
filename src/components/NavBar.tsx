@@ -26,7 +26,7 @@ export function Navbar() {
   };
 
   return (
-    <nav className="p-4">
+    <nav className="p-4 bg-[#030404]">
       <div className="max-w-6xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="text-xl font-bold text-white">

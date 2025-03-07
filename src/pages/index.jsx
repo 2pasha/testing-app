@@ -1,6 +1,6 @@
 const index = () => {
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-[80vh] overflow-hidden">
       {/* Background Video - Fullscreen */}
       <video
         autoPlay
@@ -16,7 +16,8 @@ const index = () => {
 
       {/* Overlay Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center bg-black/50">
-        <h1 className="text-5xl font-bold">Welcome to My Next.js App</h1>
+        <h1 className="text-5xl font-bold">Welcome to My Knowledge Testing App</h1>
+        <p className="mt-2">created by Kostyshyn Pavlo</p>
       </div>
     </div>
   );
