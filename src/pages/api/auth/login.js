@@ -39,7 +39,7 @@ export default async function handler(req, res) {
     };
 
     const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "10h",
     });
 
     res.setHeader(
