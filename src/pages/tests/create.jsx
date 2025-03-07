@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 import PoolConfigModal from "@/components/PoolConfigModal";
 import QuestionModal from "@/components/QuestionModal";
-import { Edit3, Trash2 } from "lucide-react";
+import { ClipboardCopy, Edit3, Trash2, Check } from "lucide-react";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModel";
 
 export default function CreateTest() {
@@ -22,6 +22,15 @@ export default function CreateTest() {
   const [editingQuestion, setEditingQuestion] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const testLink = `${window.location.origin}/test/${testCode}`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(testLink);
+    setCopySuccess(true);
+    setTimeout(() => setCopySuccess(false), 2000);
+  };
 
   // Create test
   const handleCreateTest = async () => {
@@ -49,7 +58,7 @@ export default function CreateTest() {
       console.error("Missing testId:", testId);
       return;
     }
-    
+
     console.log("sending body:", JSON.stringify({ testId, poolConfigs }));
 
     const responce = await fetch("/api/test/test-config", {
@@ -62,7 +71,9 @@ export default function CreateTest() {
     const data = await responce.json();
 
     if (responce.ok) {
-      setPools(poolConfigs.length ? poolConfigs : [{ poolId: 1, numberOfQuestions: 1 }]);
+      setPools(
+        poolConfigs.length ? poolConfigs : [{ poolId: 1, numberOfQuestions: 1 }]
+      );
       setIsConfigModalOpen(false);
     } else {
       console.error(data.message || "Failed to save test configuration.");
@@ -266,30 +277,57 @@ export default function CreateTest() {
       {step === 4 && (
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-2xl font-semibold mb-4">Test Ready!</h2>
+
+          <div className="p-4 rounded-md mb-6">
+            <h3 className="text-xl font-semibold">{test.testName}</h3>
+            <p className="text-gray-400 mb-2">{test.testDescription}</p>
+
+            <p className="text-gray-300">Total Pools: {pools.length}</p>
+            <p className="text-gray-300">
+              Total Questions:{" "}
+              {pools.reduce((sum, pool) => sum + pool.numberOfQuestions, 0)}
+            </p>
+
+            <h4 className="text-lg font-semibold mt-4">Pool Details:</h4>
+            <ul className="text-gray-400">
+              {pools.map((pool, index) => (
+                <li key={index}>
+                  <span className="text-white">Pool {pool.poolId}: </span>{" "}
+                  {pool.numberOfQuestions} Questions
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {testCode ? (
             <>
-              <p className="text-gray-400 mb-4">Share this test link:</p>
-              <input
-                type="text"
-                value={`${window.location.origin}/tests/${testCode}`}
-                readOnly
-                className="w-full bg-gray-700 text-center py-2 rounded-md"
-              />
-              <button
-                onClick={() =>
-                  navigator.clipboard.writeText(
-                    `${window.location.origin}/tests/${testCode}`
-                  )
-                }
-                className="bg-blue-500 px-6 py-3 rounded-md w-full mt-4"
-              >
-                Copy Link
-              </button>
+              <p className="text-gray-400 mb-4">share this test link:</p>
+              <div className="relative w-full">
+                {/* ✅ Input with copy icon */}
+                <input
+                  type="text"
+                  value={testLink}
+                  readOnly
+                  className="w-full bg-gray-700 text-center py-2 pr-10 rounded-md text-white"
+                />
+
+                {/* ✅ Copy Icon */}
+                <button
+                  onClick={handleCopy}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white"
+                >
+                  {copySuccess ? (
+                    <Check size={20} />
+                  ) : (
+                    <ClipboardCopy size={20} />
+                  )}
+                </button>
+              </div>
             </>
           ) : (
             <button
               onClick={handleGenerateTest}
-              className="bg-green-500 px-6 py-3 rounded-md w-full"
+              className="border border-white text-white hover:bg-white hover:text-black px-6 py-3 rounded-md w-full"
             >
               Generate Test
             </button>
