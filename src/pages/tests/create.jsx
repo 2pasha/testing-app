@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "@/contexts/AuthContext";
 import PoolConfigModal from "@/components/PoolConfigModal";
 import QuestionModal from "@/components/QuestionModal";
+import { Edit3, Trash2 } from "lucide-react";
 
 export default function CreateTest() {
   const { user } = useAuth();
@@ -183,24 +184,24 @@ export default function CreateTest() {
             {questions.map((q) => (
               <li
                 key={q.id}
-                className="bg-gray-800 p-4 rounded-md mb-4 flex justify-between"
+                className="bg-zinc-700 p-4 rounded-md mb-4 flex items-center justify-between"
               >
                 <p>{q.questionText}</p>
-                <div>
+                <div className="flex space-x-3">
                   <button
                     onClick={() => {
                       setEditingQuestion(q);
                       setIsQuestionModalOpen(true);
                     }}
-                    className="text-yellow-500 mr-3"
+                    className="cursor-pointer"
                   >
-                    Edit
+                    <Edit3 size={24} />
                   </button>
                   <button
                     onClick={() => handleDeleteQuestion(q.id)}
-                    className="text-red-500"
+                    className="cursor-pointer"
                   >
-                    Delete
+                    <Trash2 size={24} />
                   </button>
                 </div>
               </li>
@@ -216,9 +217,13 @@ export default function CreateTest() {
 
             <button
               onClick={() => setStep(4)}
-              title={questions.length === 0 ? "add some question" : "generate test"}
+              title={
+                questions.length === 0 ? "add some question" : "generate test"
+              }
               disabled={questions.length === 0}
-              className={`bg-white border border-white text-black hover:bg-black hover:text-white px-4 py-3 rounded-md ${questions.length === 0 ? "cursor-not-allowed" : ""}`}
+              className={`bg-white border border-white text-black hover:bg-black hover:text-white px-4 py-3 rounded-md ${
+                questions.length === 0 ? "cursor-not-allowed" : ""
+              }`}
             >
               generate test
             </button>
