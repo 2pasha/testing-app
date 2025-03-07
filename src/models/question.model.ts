@@ -8,6 +8,7 @@ interface QuestionAttributes {
   questionOptions: object;
   correctAnswer: object;
   weight: number;
+  poolId: number;
 }
 
 class Question extends Model<
@@ -51,6 +52,10 @@ class Question extends Model<
           type: DataTypes.INTEGER,
           defaultValue: 1,
         },
+        poolId: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        }
       },
       {
         sequelize,

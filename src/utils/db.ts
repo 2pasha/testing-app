@@ -5,6 +5,8 @@ import getTestModel from "../models/test.model";
 import getAnswerModel from "../models/answer.model";
 import getQuestionModel from "../models/question.model";
 import getTestResultModel from "../models/testResult.model";
+import getTestConfigModel from "../models/testConfig.model";
+import getGeneratedTestModel from "../models/generatedTest.model";
 
 const sequelize = new Sequelize(
   development.database,
@@ -26,14 +28,24 @@ const models = {
   Question: getQuestionModel(sequelize),
   TestResult: getTestResultModel(sequelize),
   Answer: getAnswerModel(sequelize),
-}
+  TestConfig: getTestConfigModel(sequelize),
+  GeneratedTest: getGeneratedTestModel(sequelize),
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 Object.values(models).forEach((model: any) => {
   if (model.associate) {
     model.associate(models);
   }
-})
+});
 
-export const { User, Test, Question, TestResult, Answer } = models;
+export const {
+  User,
+  Test,
+  Question,
+  TestResult,
+  Answer,
+  TestConfig,
+  GeneratedTest,
+} = models;
 export { sequelize };
