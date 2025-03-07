@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import PoolConfigModal from "@/components/PoolConfigModal";
 import QuestionModal from "@/components/QuestionModal";
 import { Edit3, Trash2 } from "lucide-react";
+import ConfirmDeleteModal from "@/components/ConfirmDeleteModel";
 
 export default function CreateTest() {
   const { user } = useAuth();
@@ -19,6 +20,8 @@ export default function CreateTest() {
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState(null);
 
   // Create test
   const handleCreateTest = async () => {
@@ -78,16 +81,20 @@ export default function CreateTest() {
   };
 
   // Delete Question
-  const handleDeleteQuestion = async (id) => {
-    const response = await fetch(`/api/questions/delete/${id}`, {
+  const handleDeleteQuestion = async () => {
+    const response = await fetch(`/api/questions/delete/${questionToDelete}`, {
       method: "DELETE",
+      credentials: "include",
     });
 
     if (response.ok) {
-      setQuestions(questions.filter((q) => q.id !== id));
+      setQuestions(questions.filter((q) => q.id !== questionToDelete));
     } else {
       alert("Failed to delete question.");
     }
+
+    setQuestionToDelete(null);
+    setIsDeleteModalOpen(false);
   };
 
   // Generate Test
@@ -198,7 +205,11 @@ export default function CreateTest() {
                     <Edit3 size={24} />
                   </button>
                   <button
-                    onClick={() => handleDeleteQuestion(q.id)}
+                    onClick={() => {
+                      console.log(q);
+                      setQuestionToDelete(q.id);
+                      setIsDeleteModalOpen(true);
+                    }}
                     className="cursor-pointer"
                   >
                     <Trash2 size={24} />
@@ -277,6 +288,11 @@ export default function CreateTest() {
         question={editingQuestion}
         testId={testId}
         pools={pools}
+      />
+      <ConfirmDeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDeleteQuestion}
       />
     </div>
   );
