@@ -14,7 +14,7 @@ export default function CreateTest() {
   const [test, setTest] = useState({ testName: "", testDescription: "" });
   const [testId, setTestId] = useState(null);
   const [questions, setQuestions] = useState([]);
-  const [pools, setPools] = useState([{ id: 1 }]);
+  const [pools, setPools] = useState([{ poolId: 1 }]);
   const [testCode, setTestCode] = useState(null);
 
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
@@ -44,8 +44,29 @@ export default function CreateTest() {
 
   // Configure Test Pools
   const handleSaveConfig = async (poolConfigs) => {
-    setPools(poolConfigs);
-    setIsConfigModalOpen(false);
+    if (!testId) {
+      alert("Error: Test ID is missing");
+      console.error("Missing testId:", testId);
+      return;
+    }
+    
+    console.log("sending body:", JSON.stringify({ testId, poolConfigs }));
+
+    const responce = await fetch("/api/test/test-config", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ testId, poolConfigs }),
+    });
+
+    const data = await responce.json();
+
+    if (responce.ok) {
+      setPools(poolConfigs.length ? poolConfigs : [{ poolId: 1, numberOfQuestions: 1 }]);
+      setIsConfigModalOpen(false);
+    } else {
+      console.error(data.message || "Failed to save test configuration.");
+    }
   };
 
   // Add or Edit a Question
@@ -280,6 +301,7 @@ export default function CreateTest() {
         isOpen={isConfigModalOpen}
         onClose={() => setIsConfigModalOpen(false)}
         onSave={handleSaveConfig}
+        initialPools={pools}
       />
       <QuestionModal
         isOpen={isQuestionModalOpen}

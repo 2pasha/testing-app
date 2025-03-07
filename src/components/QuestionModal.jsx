@@ -31,7 +31,7 @@ export default function QuestionModal({
         questionOptions: [],
         correctAnswer: [],
         weight: 1,
-        poolId: pools.length ? pools[0].id : 1,
+        poolId: pools.length ? pools[0].poolId : 1,
         testId: testId || "",
       });
     }
@@ -83,6 +83,8 @@ export default function QuestionModal({
 
   // Validate fields before saving
   const handleSave = () => {
+    console.log(questionData);
+
     if (!questionData.questionText.trim()) {
       setError("Question text is required.");
       return;
@@ -102,7 +104,11 @@ export default function QuestionModal({
       return;
     }
 
-    if ((questionData.questionType === 'text' || questionData.questionType === 'true_false') && questionData.questionOptions.length > 0) {
+    if (
+      (questionData.questionType === "text" ||
+        questionData.questionType === "true_false") &&
+      questionData.questionOptions.length > 0
+    ) {
       setError("This question type does not require options.");
       return;
     }
@@ -142,18 +148,24 @@ export default function QuestionModal({
 
           <label className="block text-sm mb-1">Select Pool</label>
           <select
-            value={questionData.poolId}
+            value={questionData.poolId || (pools.length ? pools[0].poolId : 1)}
             onChange={(e) =>
-              setQuestionData({ ...questionData, poolId: e.target.value })
+              setQuestionData({ ...questionData, poolId: Number(e.target.value) })
             }
             className="w-full px-3 py-2 bg-gray-700 rounded-md text-white mb-4"
           >
-            {pools.map((pool) => (
-              <option key={pool.id} value={pool.id}>
-                Pool {pool.id}
-              </option>
-            ))}
+            {pools.map((pool) => {
+              console.log(pool);
+              return (
+                <option key={pool.poolId} value={pool.poolId}>
+                  Pool {pool.poolId}
+                </option>
+              );
+            })}
           </select>
+
+          {console.log("Pools Array:", pools)}
+          {console.log("Current Selected Pool:", questionData.poolId)}
 
           <label className="block text-sm mb-1">Question Type</label>
           <select

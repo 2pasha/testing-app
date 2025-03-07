@@ -1,10 +1,17 @@
 import { useState } from "react";
 
-export default function PoolConfigModal({ isOpen, onClose, onSave }) {
-  const [pools, setPools] = useState([]);
+export default function PoolConfigModal({
+  isOpen,
+  onClose,
+  onSave,
+  initialPools,
+}) {
+  const [pools, setPools] = useState(
+    initialPools || [{ poolId: 1, numberOfQuestions: 1 }]
+  );
 
   const handleAddPool = () => {
-    setPools([...pools, { id: pools.length + 1, numberOfQuestions: 1 }]);
+    setPools([...pools, { poolId: pools.length + 1, numberOfQuestions: 1 }]);
   };
 
   const handleUpdatePool = (index, field, value) => {
