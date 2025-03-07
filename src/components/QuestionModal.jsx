@@ -94,11 +94,16 @@ export default function QuestionModal({
     }
 
     if (
-      (questionData.questionType !== "text" ||
-        questionData.questionType !== "true_false") &&
+      questionData.questionType !== "text" &&
+      questionData.questionType !== "true_false" &&
       questionData.questionOptions.length === 0
     ) {
       setError("At least one option is required.");
+      return;
+    }
+
+    if ((questionData.questionType === 'text' || questionData.questionType === 'true_false') && questionData.questionOptions.length > 0) {
+      setError("This question type does not require options.");
       return;
     }
 
@@ -250,16 +255,6 @@ export default function QuestionModal({
             }
             className="w-full px-3 py-2 bg-gray-700 rounded-md text-white mb-4"
             min="1"
-          />
-
-          <label className="block text-sm mb-1">Pool ID</label>
-          <input
-            type="text"
-            value={questionData.poolId}
-            onChange={(e) =>
-              setQuestionData({ ...questionData, poolId: e.target.value })
-            }
-            className="w-full px-3 py-2 bg-gray-700 rounded-md text-white mb-4"
           />
         </div>
 
