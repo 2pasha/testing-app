@@ -1,34 +1,23 @@
-import { Navbar } from "@/components/NavBar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-
 const index = () => {
   return (
-    <div className="flex flex-col">
-      <main className="flex flex-col items-center justify-center flex-grow p-6 text-center">
-        <Card className="max-w-2xl shadow-lg">
-          <CardContent className="p-6">
-            <h1 className="text-3xl font-bold mb-4">
-              Welcome to the Knowledge Testing Platform
-            </h1>
-            <p className="text-gray-600 mb-6">
-              Easily create, manage, and participate in student knowledge
-              assessments.
-            </p>
-            <Button
-              className="mr-2"
-              variant="default"
-              size="lg"
-              href="/register"
-            >
-              Get Started
-            </Button>
-            <Button variant="outline" size="lg" href="/login">
-              Login
-            </Button>
-          </CardContent>
-        </Card>
-      </main>
+    <div className="relative w-full h-screen overflow-hidden">
+      {/* Background Video - Fullscreen */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute top-0 left-0 w-full h-full object-cover"
+      >
+        <source src="/videos/video.webm" type="video/webm" />
+        <source src="/videos/video.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Overlay Content */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center bg-black/50">
+        <h1 className="text-5xl font-bold">Welcome to My Next.js App</h1>
+      </div>
     </div>
   );
 };
