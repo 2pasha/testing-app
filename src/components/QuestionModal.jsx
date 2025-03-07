@@ -117,8 +117,8 @@ export default function QuestionModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className=" p-6 rounded-lg w-96 max-h-[90vh] flex flex-col">
-        <div className="overflow-y-auto flex-grow pr-2">
+      <div className="p-6 rounded-lg w-120 max-h-[90vh] flex flex-col">
+        <div className="overflow-y-auto flex-grow px-2">
           <h2 className="text-xl font-semibold mb-4 text-center">
             {question ? "[ edit question ]" : "[ add question ]"}
           </h2>
