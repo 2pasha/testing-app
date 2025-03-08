@@ -1,5 +1,5 @@
 import authMiddleware from "@/utils/authMiddleware";
-import { Question, Test, TestResult } from "@/utils/db";
+import { Question, Test, TestResult, TestConfig } from "@/utils/db";
 import { autorize } from "@/utils/roleMiddleware";
 
 export default async function handler(req, res) {
@@ -22,6 +22,7 @@ export default async function handler(req, res) {
       include: [
         { model: Question, as: "questions" },
         { model: TestResult, as: "TestResults" },
+        { model: TestConfig, as: "TestConfigs" },
       ],
     });
 

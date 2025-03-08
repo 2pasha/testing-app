@@ -39,6 +39,15 @@ class TestConfig extends Model<
       }
     )
   }
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  static associate(models: any) {
+    if (!models.Test || !(models.Test.prototype instanceof Model)) {
+      throw new Error("Test model is not initialized");
+    }
+
+    TestConfig.belongsTo(models.Test, { foreignKey: "testId", as: "Test" });
+  }
 }
 
 const initializeTestConfigModel = (sequelize: Sequelize) => {
