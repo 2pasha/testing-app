@@ -67,27 +67,35 @@ export default function Tests() {
         <p className="text-center text-gray-400">No tests found.</p>
       ) : (
         <ul className="max-w-3xl mx-auto">
-          {tests.map((test) => (            
+          {tests.map((test) => (
             <li
               key={test.id}
-              className="border border-white p-4 rounded-lg shadow-md mb-4 flex justify-between items-center"
+              title="more details"
+              className="cursor-pointer border border-white p-4 rounded-lg shadow-md mb-4 flex justify-between items-center"
             >
-              <div>
-                <h2 className="text-xl font-semibold">{test.testName || test.Test.testName}</h2>
-                <p className="text-gray-400">{test.testDescription || test.Test.testDescription}</p>
-              </div>
-              {user.role === "teacher" ? (
-                <Link
-                  href={`/tests/${test.id}`}
-                  className="text-gray-300 hover:text-white"
-                >
-                  <Edit3 size={24} />
-                </Link>
-              ) : (
-                <p className="text-lg font-bold">
-                  {test.score}
-                </p>
-              )}
+              <Link
+                className="flex justify-between w-full items-center"
+                href={`/tests/${test.id}`}
+              >
+                <div>
+                  <h2 className="text-xl font-semibold">
+                    {test.testName || test.Test.testName}
+                  </h2>
+                  <p className="text-gray-400">
+                    {test.testDescription || test.Test.testDescription}
+                  </p>
+                </div>
+                {user.role === "teacher" ? (
+                  <Link
+                    href={`/tests/${test.id}`}
+                    className="text-gray-300 hover:text-white"
+                  >
+                    <Edit3 size={24} />
+                  </Link>
+                ) : (
+                  <p className="text-lg font-bold">{test.score}</p>
+                )}
+              </Link>
             </li>
           ))}
         </ul>
