@@ -54,9 +54,13 @@ class Test extends Model<TestAttributes, Optional<TestAttributes, "id">> {
     if (!models.Question || !(models.Question.prototype instanceof Model)) {
       throw new Error("Question model is not initialized");
     }
+    if (!models.TestResult || !(models.TestResult.prototype instanceof Model)) {
+      throw new Error("TestResult model is not initialized");
+    }
 
     Test.belongsTo(models.User, { foreignKey: "teacherId" });
     Test.hasMany(models.Question, { foreignKey: "testId", as: "questions" });
+    Test.hasMany(models.TestResult, { foreignKey: "testId", as: "TestResult" });
   }
 }
 

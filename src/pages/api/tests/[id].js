@@ -1,4 +1,6 @@
-import { Question, Test } from "@/utils/db";
+import authMiddleware from "@/utils/authMiddleware";
+import { Question, Test, TestResult } from "@/utils/db";
+import { autorize } from "@/utils/roleMiddleware";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -6,10 +8,21 @@ export default async function handler(req, res) {
   }
 
   try {
+    await new Promise((resolve, reject) => {
+      authMiddleware(req, res, (err) => (err ? reject(err) : resolve()));
+    });
+
+    await new Promise((resolve, reject) => {
+      autorize(["teacher"])(req, res, (err) => (err ? reject(err) : resolve()));
+    });
+
     const { id } = req.query;
 
     const test = await Test.findByPk(id, {
-      include: [{ model: Question, as: "questions" }],
+      include: [
+        { model: Question, as: "questions" },
+        { model: TestResult, as: "TestResults" },
+      ],
     });
 
     if (!test) {
