@@ -19,6 +19,13 @@ export default function TestDetails() {
   const [questionToDelete, setQuestionToDelete] = useState(null);
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [testLink, setTestLink] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setTestLink(`${window.location.origin}/test/${testCode}`);
+    }
+  }, [testCode]);
 
   useEffect(() => {
     if (!id) return;
@@ -170,8 +177,6 @@ export default function TestDetails() {
       alert(data.message);
     }
   };
-
-  const testLink = `${window.location.origin}/test/${testCode}`;
 
   const handleCopy = () => {
     navigator.clipboard.writeText(testLink);
