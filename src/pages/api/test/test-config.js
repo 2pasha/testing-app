@@ -13,9 +13,7 @@ export default async function handler(req, res) {
     });
 
     await new Promise((resolve, reject) => {
-      autorize(["teacher"])(req, res, (err) =>
-        err ? reject(err) : resolve()
-      );
+      autorize(["teacher"])(req, res, (err) => (err ? reject(err) : resolve()));
     });
 
     const { testId, poolConfigs } = req.body; // Array of { poolId, numberOfQuestions }
@@ -25,7 +23,7 @@ export default async function handler(req, res) {
     try {
       await TestConfig.destroy({ where: { testId }, transaction }); // Remove existing config
 
-      const configs = await TestConfig.bulkCreate(
+      await TestConfig.bulkCreate(
         poolConfigs.map((config) => ({
           testId,
           ...config,
@@ -34,17 +32,18 @@ export default async function handler(req, res) {
       );
 
       await transaction.commit();
-      res.status(201).json({ message: "Test configuration saved", configs });
+
+      const updatedConfigs = await TestConfig.findAll({ where: { testId } });
+
+      res.status(201).json({ message: "Test configuration saved", configs: updatedConfigs });
     } catch (error) {
       await transaction.rollback();
       throw error;
     }
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        message: "Error saving test configuration",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Error saving test configuration",
+      error: error.message,
+    });
   }
 }

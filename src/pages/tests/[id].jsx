@@ -30,7 +30,7 @@ export default function TestDetails() {
 
         const data = await response.json();
         setTest(data.test);
-        setPools(data.test.TestConfig || [{ poolId: 1, numberOfQuestions: 1 }]);
+        setPools(data.test.TestConfigs || [{ poolId: 1, numberOfQuestions: 1 }]);
       } catch (err) {
         setError(err.message);
       }
@@ -134,9 +134,12 @@ export default function TestDetails() {
     const data = await responce.json();
 
     if (responce.ok) {
-      setPools(
-        poolConfigs.length ? poolConfigs : [{ poolId: 1, numberOfQuestions: 1 }]
-      );
+      setPools(data.configs);
+      setTest((prevTest) => ({
+        ...prevTest,
+        TestConfigs: data.configs, // ✅ Add new pool to list
+      }));
+      console.log(test);
       setIsConfigModalOpen(false);
     } else {
       console.error(data.message || "Failed to save test configuration.");
