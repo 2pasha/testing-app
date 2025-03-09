@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import QuestionModal from "@/components/QuestionModal";
-import { Edit3, Trash2 } from "lucide-react";
+import { Check, ClipboardCopy, Edit3, Trash2 } from "lucide-react";
 import ConfirmDeleteModal from "@/components/ConfirmDeleteModel";
 import PoolConfigModal from "@/components/PoolConfigModal";
 
@@ -10,6 +10,7 @@ export default function TestDetails() {
   const { id } = router.query;
 
   const [test, setTest] = useState(null);
+  const [testCode, setTestCode] = useState(null);
   const [error, setError] = useState("");
   const [pools, setPools] = useState([]);
   const [isQuestionModalOpen, setIsQuestionModalOpen] = useState(false);
@@ -17,6 +18,8 @@ export default function TestDetails() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+  
 
   useEffect(() => {
     if (!id) return;
@@ -30,7 +33,9 @@ export default function TestDetails() {
 
         const data = await response.json();
         setTest(data.test);
-        setPools(data.test.TestConfigs || [{ poolId: 1, numberOfQuestions: 1 }]);
+        setPools(
+          data.test.TestConfigs || [{ poolId: 1, numberOfQuestions: 1 }]
+        );
       } catch (err) {
         setError(err.message);
       }
@@ -141,6 +146,38 @@ export default function TestDetails() {
     } else {
       console.error(data.message || "Failed to save test configuration.");
     }
+  };
+
+  const handleGenerateTest = async () => {
+    const { questions, id: testId } = test;
+
+    if (questions.length === 0) {
+      alert("Error: You must add at least one question to test");
+      return;
+    }
+
+    const response = await fetch("/api/test/generate-test", {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ testId }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setTestCode(data.testCode);
+    } else {
+      alert(data.message);
+    }
+  };
+
+  const testLink = `${window.location.origin}/test/${testCode}`;
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(testLink);
+    setCopySuccess(true);
+    setTimeout(() => setCopySuccess(false), 2000);
   };
 
   if (error) {
@@ -259,13 +296,47 @@ export default function TestDetails() {
           </ul>
         </>
       )}
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto flex flex-col">
         <button
           onClick={() => setIsQuestionModalOpen(true)}
           className="border border-white text-white hover:bg-white hover:text-black mt-3 px-6 py-3 rounded-md"
         >
           add question
         </button>
+
+        <button
+          onClick={handleGenerateTest}
+          className="mt-6 bg-white border border-white text-black rounded-md hover:bg-black hover:text-white px-6 py-3"
+        >
+          generate test
+        </button>
+
+        {testCode && (
+          <>
+            <p className="text-gray-400 mt-4 mb-2">share this test link:</p>
+            <div className="relative w-full">
+              {/* ✅ Input with copy icon */}
+              <input
+                type="text"
+                value={testLink}
+                readOnly
+                className="w-full bg-gray-700 text-center py-2 pr-10 rounded-md text-white"
+              />
+
+              {/* ✅ Copy Icon */}
+              <button
+                onClick={handleCopy}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-white"
+              >
+                {copySuccess ? (
+                  <Check size={20} />
+                ) : (
+                  <ClipboardCopy size={20} />
+                )}
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
       <h2 className="max-w-4xl mx-auto text-2xl font-semibold mt-6 mb-4">
