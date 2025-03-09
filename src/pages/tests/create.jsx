@@ -23,8 +23,13 @@ export default function CreateTest() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [testLink, setTestLink] = useState("");
 
-  const testLink = `${window.location.origin}/test/${testCode}`;
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setTestLink(`${window.location.origin}/test/${testCode}`);
+    }
+  }, [testCode]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(testLink);
