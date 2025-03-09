@@ -19,7 +19,6 @@ export default function TestDetails() {
   const [questionToDelete, setQuestionToDelete] = useState(null);
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
-  
 
   useEffect(() => {
     if (!id) return;
@@ -239,9 +238,17 @@ export default function TestDetails() {
               >
                 <div>
                   <p className="font-semibold">{question.questionText}</p>
-                  <p className="text-gray-300">
-                    Type: {question.questionType.split("_").join(" ")}
-                  </p>
+                  <div>
+                    <p className="text-gray-300">
+                      Type: {question.questionType.split("_").join(" ")}
+                    </p>
+                    <p className="text-gray-300">
+                      Pool:{" "}
+                      {test.TestConfigs.find(
+                        (conf) => conf.id === question.poolId
+                      )?.poolId || "Unknown"}
+                    </p>
+                  </div>
 
                   <div className="mt-2">
                     <strong>Options:</strong>
