@@ -122,8 +122,6 @@ export default function TestDetails() {
       return;
     }
 
-    console.log("sending body:", JSON.stringify({ testId, poolConfigs }));
-
     const responce = await fetch("/api/test/test-config", {
       method: "POST",
       credentials: "include",
@@ -139,7 +137,6 @@ export default function TestDetails() {
         ...prevTest,
         TestConfigs: data.configs, // ✅ Add new pool to list
       }));
-      console.log(test);
       setIsConfigModalOpen(false);
     } else {
       console.error(data.message || "Failed to save test configuration.");

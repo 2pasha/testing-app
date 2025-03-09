@@ -83,8 +83,6 @@ export default function QuestionModal({
 
   // Validate fields before saving
   const handleSave = () => {
-    console.log(questionData);
-
     if (!questionData.questionText.trim()) {
       setError("Question text is required.");
       return;
@@ -155,7 +153,6 @@ export default function QuestionModal({
             className="w-full px-3 py-2 bg-gray-700 rounded-md text-white mb-4"
           >
             {pools.map((pool) => {
-              console.log(pool);
               return (
                 <option key={pool.poolId} value={pool.poolId}>
                   Pool {pool.poolId}
@@ -163,9 +160,6 @@ export default function QuestionModal({
               );
             })}
           </select>
-
-          {console.log("Pools Array:", pools)}
-          {console.log("Current Selected Pool:", questionData.poolId)}
 
           <label className="block text-sm mb-1">Question Type</label>
           <select

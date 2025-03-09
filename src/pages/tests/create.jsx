@@ -59,8 +59,6 @@ export default function CreateTest() {
       return;
     }
 
-    console.log("sending body:", JSON.stringify({ testId, poolConfigs }));
-
     const responce = await fetch("/api/test/test-config", {
       method: "POST",
       credentials: "include",
@@ -238,7 +236,6 @@ export default function CreateTest() {
                   </button>
                   <button
                     onClick={() => {
-                      console.log(q);
                       setQuestionToDelete(q.id);
                       setIsDeleteModalOpen(true);
                     }}
