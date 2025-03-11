@@ -20,6 +20,7 @@ export default function TestDetails() {
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   const [testLink, setTestLink] = useState("");
+  const [studentResults, setStudentResults] = useState([]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -42,6 +43,32 @@ export default function TestDetails() {
         setPools(
           data.test.TestConfigs || [{ poolId: 1, numberOfQuestions: 1 }]
         );
+
+        // ✅ Group results by student ID
+        const groupedResults = data.test.TestResults.reduce((acc, result) => {
+          if (!result.student) return acc;
+
+          if (!acc[result.studentId])
+            acc[result.studentId] = {
+              student: result.student,
+              attempts: [],
+            };
+
+          acc[result.student.id].attempts.push(result);
+          return acc;
+        }, {});
+
+        // ✅ Convert grouped data into array format
+        const formattedResults = Object.values(groupedResults).map(
+          ({ student, attempts }) => ({
+            student,
+            latestAttempt: attempts[0], // Most recent attempt
+            bestScore: Math.max(...attempts.map((a) => a.score)), // Highest score
+            attempts,
+          })
+        );
+
+        setStudentResults(formattedResults);
       } catch (err) {
         setError(err.message);
       }
@@ -354,9 +381,44 @@ export default function TestDetails() {
       <h2 className="max-w-4xl mx-auto text-2xl font-semibold mt-6 mb-4">
         [ test results ]
       </h2>
-      <p className="max-w-4xl mx-auto text-gray-400">
-        Results will be displayed here...
-      </p>
+      {studentResults.length > 0 ? (
+        <div className="max-w-4xl mx-auto">
+          {studentResults.map(
+            ({ student, latestAttempt, bestScore, attempts }) => (
+              <div key={student.id} className="border p-4 rounded-md mb-4">
+                <p className="text-lg font-bold text-white">
+                  {student.name} ({student.email})
+                </p>
+                <p className="text-green-400">
+                  Latest Score: {latestAttempt?.score} / {test.questions.length}
+                </p>
+                <p>
+                  Best Score: {bestScore} / {test.questions.length}
+                </p>
+
+                <h3 className="mt-4 text-lg font-semibold text-white">
+                  Attempt History:
+                </h3>
+                <ul className="list-disc list-inside text-gray-300">
+                  {attempts.map((attempt, index) => (
+                    <li key={attempt.id}>
+                      Attempt {index + 1}: Score {attempt.score} /{" "}
+                      {test.questions.length}
+                      {attempt.completedAt
+                        ? ` - ${new Date(attempt.completedAt).toLocaleString()}`
+                        : " (In Progress)"}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          )}
+        </div>
+      ) : (
+        <p className="max-w-4xl mx-auto text-gray-400">
+          No attempts recorded yet for this test.
+        </p>
+      )}
 
       {/* Question Edit Modal */}
       <QuestionModal
