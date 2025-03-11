@@ -23,7 +23,7 @@ export default function TestDetails() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setTestLink(`${window.location.origin}/test/${testCode}`);
+      setTestLink(`${window.location.origin}/tests/pass/${testCode}`);
     }
   }, [testCode]);
 

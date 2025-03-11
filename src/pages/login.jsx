@@ -8,6 +8,7 @@ export default function Login() {
   const { login } = useAuth();
   const [errorMessage, setErrorMessage] = useState(""); // Handle errors
   const router = useRouter();
+  const { redirectTo } = router.query;
 
   // Validation Schema
   const validationSchema = Yup.object().shape({
@@ -24,7 +25,7 @@ export default function Login() {
     const result = await login(values.email, values.password);
 
     if (result.success) {
-      router.push("/profile");
+      router.push(redirectTo || "/profile");
     } else {
       setErrorMessage(result.message);
     }
