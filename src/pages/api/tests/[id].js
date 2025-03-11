@@ -1,5 +1,5 @@
 import authMiddleware from "@/utils/authMiddleware";
-import { Question, Test, TestResult, TestConfig } from "@/utils/db";
+import { Question, Test, TestResult, TestConfig, User } from "@/utils/db";
 import { autorize } from "@/utils/roleMiddleware";
 
 export default async function handler(req, res) {
@@ -21,7 +21,13 @@ export default async function handler(req, res) {
     const test = await Test.findByPk(id, {
       include: [
         { model: Question, as: "questions" },
-        { model: TestResult, as: "TestResults" },
+        {
+          model: TestResult,
+          as: "TestResults",
+          include: [
+            { model: User, as: "student", attributes: ["id", "name", "email"] },
+          ],
+        },
         { model: TestConfig, as: "TestConfigs" },
       ],
     });

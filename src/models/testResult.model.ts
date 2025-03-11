@@ -60,11 +60,11 @@ class TestResult extends Model<
       throw new Error("User model is not initialized");
     }
 
-    models.User.hasMany(TestResult, { foreignKey: "studentId" });
+    models.User.hasMany(TestResult, { foreignKey: "studentId", as: "student" });
     models.Test.hasMany(TestResult, { foreignKey: "testId" });
 
     TestResult.belongsTo(models.Test, { foreignKey: "testId" });
-    TestResult.belongsTo(models.User, { foreignKey: "studentId" });
+    TestResult.belongsTo(models.User, { foreignKey: "studentId", as: "student" });
   }
 }
 
