@@ -10,7 +10,11 @@ export default async function calculateScoreAndSaveAnswers(studentId, testId, an
       continue;
     }
 
-    const isCorrect = JSON.stringify(question.correctAnswer) === JSON.stringify(ans.studentAnswer);
+    console.log(`Processing questionId: ${ans.questionId}, Answer received:`, ans.studentAnswer);
+
+    const studentAnswer = ans.studentAnswer ? JSON.stringify(ans.studentAnswer) : "[]";
+
+    const isCorrect = JSON.stringify(question.correctAnswer) === studentAnswer;
 
     if (isCorrect) {
       score += question.weight;
@@ -21,7 +25,7 @@ export default async function calculateScoreAndSaveAnswers(studentId, testId, an
         studentId,
         testId,
         questionId: ans.questionId,
-        studentAnswer: ans.studentAnswer,
+        studentAnswer,
         isCorrect,
       },
       { transaction }

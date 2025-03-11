@@ -14,10 +14,20 @@ export default async function handler(req, res) {
     });
 
     await new Promise((resolve, reject) => {
-      autorize(["student"])(req, res, (err) => (err ? reject(err) : resolve()));
+      autorize(["student", "teacher"])(req, res, (err) =>
+        err ? reject(err) : resolve()
+      );
     });
 
     const { testId, answers } = req.body;
+
+    console.log("recived answers:", JSON.stringify(answers, null, 2));
+
+    if (!Array.isArray(answers)) {
+      return res
+        .status(400)
+        .json({ message: "Invalid answers format, expected an array" });
+    }
 
     const questions = await Question.findAll({ where: { testId } });
 
@@ -28,7 +38,20 @@ export default async function handler(req, res) {
     const transaction = await sequelize.transaction();
 
     try {
-      const score = await calculateScoreAndSaveAnswers(req.user.id, testId, answers, questions, transaction);
+      const formattedAnswers = answers.map(ans => ({
+        questionId: ans.questionId,
+        studentAnswer: ans.studentAnswer || [],
+      }))
+
+      console.log("formated answers: ", JSON.stringify(formattedAnswers, null, 2))
+
+      const score = await calculateScoreAndSaveAnswers(
+        req.user.id,
+        testId,
+        formattedAnswers,
+        questions,
+        transaction
+      );
 
       await TestResult.create(
         {
