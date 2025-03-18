@@ -3,6 +3,7 @@ import "../styles/globals.css";
 import { useEffect } from "react";
 import { Footer } from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
+import Head from "next/head";
 
 export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
@@ -10,12 +11,19 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <AuthProvider>
-      <div className="flex flex-col min-h-screen justify-between bg-background text-foreground">
-        <Navbar />
-        <Component {...pageProps} />
-        <Footer />
-      </div>
-    </AuthProvider>
+    <>
+      <Head>
+        <link rel="icon" type='image/png' href="/favicon.png" />
+        <title>test your brain</title>
+      </Head>
+
+      <AuthProvider>
+        <div className="flex flex-col min-h-screen justify-between bg-background text-foreground">
+          <Navbar />
+          <Component {...pageProps} />
+          <Footer />
+        </div>
+      </AuthProvider>
+    </>
   );
 }
