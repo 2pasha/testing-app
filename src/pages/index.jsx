@@ -1,6 +1,6 @@
 const index = () => {
   return (
-    <div className="relative w-full h-[80vh] overflow-hidden">
+    <div className="relative w-full h-[86vh] overflow-hidden">
       {/* Background Video - Fullscreen */}
       <video
         autoPlay
@@ -9,8 +9,8 @@ const index = () => {
         playsInline
         className="absolute top-0 left-0 w-full h-full object-cover"
       >
-        <source src="/videos/video.webm" type="video/webm" />
-        <source src="/videos/video.mp4" type="video/mp4" />
+        <source src="/videos/video_bg.webm" type="video/webm" />
+        <source src="/videos/video_bg.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
