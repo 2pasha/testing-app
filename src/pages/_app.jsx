@@ -13,7 +13,7 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <link rel="icon" type='image/png' href="/favicon.png" />
+        <link rel="icon" type='image/png' href="/favicon.ico" />
         <title>test your brain</title>
       </Head>
 
